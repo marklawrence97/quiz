@@ -124,3 +124,8 @@
     font-size: 4rem;
     font-weight: bold;
 }
+
+.error {
+    font-size: 0.8rem;
+    color: red;
+}

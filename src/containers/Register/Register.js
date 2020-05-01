@@ -1,6 +1,7 @@
-import React from 'react'
-import './Register.css'
-import UserInput from '../../components/UserInput/UserInput'
+import React from 'react';
+import './Register.css';
+import UserInput from '../../components/UserInput/UserInput';
+import { Redirect } from 'react-router-dom'
 
 class Register extends React.Component {
     state = {
@@ -9,7 +10,10 @@ class Register extends React.Component {
         lname: "",
         password: "",
         password2: "",
-        email: ""
+        email: "",
+        error: "",
+        showError: false,
+        redirec: null,
     }
 
     handleUserNameInput = (event) => {
@@ -46,9 +50,72 @@ class Register extends React.Component {
         this.setState({
             password2: event.target.value
         })
-    } 
+    }
+    
+    onRegister = async () => {
+        const { username, fname, lname, password, email, password2, showError} = this.state
+
+        if (!password || !password2 || !email || !username || !lname || !fname) {
+            this.setState({
+                showError: true,
+                error: "Your need to fill in all of the fields!"
+            })
+            return
+        }
+
+        if (!email.includes("@")) {
+            this.setState({
+                showError: true,
+                error: "Your email address doesn't look like the right format!"
+            })
+            return 
+        }
+        
+        if (password !== password2) {
+            this.setState({
+                showError: true,
+                error: "Your passwords don't match!"
+            })
+            return
+        }
+
+        this.setState({
+            error: "",
+            showError: false
+        })     
+
+        if (!showError) {
+            const response = await fetch('/register', 
+                {
+                    method: "POST",
+                    cache: "no-cache",
+                    mode: "cors",
+                    headers: {
+                        username,
+                        fname,
+                        lname,
+                        password,
+                        email
+                    }
+                })
+        
+            const content = await response.json()
+            console.log(content)
+
+            if (content['logIn']) {
+                this.setState({
+                    redirect: '/success'
+                })
+            }
+        }
+    }
 
     render() {
+
+        if (this.state.redirect) {
+            return <Redirect to={this.state.redirect} />
+        }
+
         return (
             <div className="container">
                 <div className="circle1"></div>
@@ -93,9 +160,13 @@ class Register extends React.Component {
                                 stateVal={this.state.password2}
                                 handleChange={this.handlePassword2Input}
                             />
+                            <p className="error">{this.state.error}</p>
                         </div>
                         <div className="register button">
-                            <button className="submit" type="submit">
+                            <button 
+                                className="submit" 
+                                type="submit"
+                                onClick={this.onRegister}>
                                 Register
                             </button>
                             <p>Already a member? Log in instead...</p>
