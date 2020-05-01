@@ -1,4 +1,5 @@
 import React from 'react'
+import Nav from '../components/Nav/Nav'
 
 class Success extends React.Component {
     state = {
@@ -24,6 +25,7 @@ class Success extends React.Component {
     render() {
         return (
             <>
+            <Nav />
             <h1>You have logged in </h1>
             <h3>{this.state.username}</h3>
             </>
