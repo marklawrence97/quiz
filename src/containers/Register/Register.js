@@ -1,7 +1,7 @@
 import React from 'react';
 import './Register.css';
 import UserInput from '../../components/UserInput/UserInput';
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 
 class Register extends React.Component {
     state = {
@@ -100,7 +100,6 @@ class Register extends React.Component {
                 })
         
             const content = await response.json()
-            console.log(content)
 
             if (content['logIn']) {
                 this.setState({
@@ -169,7 +168,7 @@ class Register extends React.Component {
                                 onClick={this.onRegister}>
                                 Register
                             </button>
-                            <p>Already a member? Log in instead...</p>
+                            <Link to="/login">Already a member? Log in instead...</Link>
                         </div>
                     </div>
                 </div>

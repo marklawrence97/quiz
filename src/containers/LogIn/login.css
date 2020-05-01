@@ -15,7 +15,7 @@
 }
 
 .formContainer {
-    height: 80%;
+    height: auto;
     width: 40%;
     background-color: #F9F9F9;
     border-radius: 20px;
